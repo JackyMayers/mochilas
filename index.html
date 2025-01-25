@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Calculadora de Materiais</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            text-align: center;
+            padding: 20px;
+            background-color: #2c2f38;
+            color: #f5f5f5;
+        }
+        .container {
+            max-width: 400px;
+            margin: auto;
+            padding: 20px;
+            border-radius: 10px;
+            background-color: #444;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+        }
+        input {
+            padding: 10px;
+            width: 100%;
+            margin: 10px 0;
+            border-radius: 5px;
+            border: 1px solid #666;
+            background-color: #555;
+            color: #fff;
+            font-size: 16px;
+        }
+        input:focus {
+            border-color: #3498db;
+            outline: none;
+        }
+        h2, h3, h4 {
+            color: #f5f5f5;
+            margin-bottom: 10px;
+        }
+        p {
+            color: #ccc;
+            font-size: 18px;
+            margin-top: 10px;
+        }
+        .result-box {
+            margin-top: 20px;
+            background-color: #555;
+            padding: 15px;
+            border-radius: 5px;
+        }
+        .result-box strong {
+            color: #3498db;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h2>Calculadora de Materiais</h2>
+        <label for="mochilas">Quantas mochilas?</label>
+        <input type="number" id="mochilas" value="0" min="0" oninput="calcularMateriais(); calcularValor();">
+        
+        <div class="result-box">
+            <h3>Materiais Necessários:</h3>
+            <p id="resultado"></p>
+            <h4>Detalhamento da Produção:</h4>
+            <p id="detalhamento"></p>
+        </div>
+        
+        <h2>Calculadora de Valor</h2>
+        <label for="valor">Valor unitário da mochila:</label>
+        <input type="number" id="valor" value="0" min="0" step="0.01" oninput="calcularValor();">
+        
+        <div class="result-box">
+            <h3>Valor Total:</h3>
+            <p id="valorTotal">R$ 0,00</p>
+        </div>
+    </div>
+
+    <script>
+        function calcularMateriais() {
+            let qtdMochilas = parseInt(document.getElementById("mochilas").value);
+            
+            if (isNaN(qtdMochilas) || qtdMochilas < 1) {
+                qtdMochilas = 0; // Se for inválido ou 0, setar como 0
+            }
+            
+            let tecidos = qtdMochilas * 25;
+            let borrachas = tecidos * 3;
+            let peles = tecidos;
+            let elasticos = borrachas / 3;
+            
+            document.getElementById("resultado").innerHTML = `
+                <strong>${tecidos}</strong> Tecidos<br>
+                <strong>${borrachas}</strong> Borrachas<br>
+                <strong>${peles}</strong> Peles<br>
+                <strong>${elasticos}</strong> Elásticos
+            `;
+
+            document.getElementById("detalhamento").innerHTML = `
+                Para fazer <strong>${tecidos}</strong> tecidos, você precisa de <strong>${borrachas}</strong> borrachas e <strong>${peles}</strong> peles.<br>
+                Para fazer <strong>${borrachas}</strong> borrachas, você precisa de <strong>${elasticos}</strong> elásticos.
+            `;
+        }
+
+        function calcularValor() {
+            let qtdMochilas = parseInt(document.getElementById("mochilas").value);
+            let valorUnitario = parseFloat(document.getElementById("valor").value);
+            
+            if (isNaN(qtdMochilas) || qtdMochilas < 1) {
+                qtdMochilas = 0; // Se for inválido ou 0, setar como 0
+            }
+            
+            let valorTotal = qtdMochilas * valorUnitario;
+            
+            document.getElementById("valorTotal").innerHTML = `R$ ${valorTotal.toFixed(2)}`;
+        }
+    </script>
+</body>
+</html>
