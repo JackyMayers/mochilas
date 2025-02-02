@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
-	<link rel="icon" href="https://i.postimg.cc/MG7qzW4x/emote.png" type="image/x-icon">
+    <link rel="icon" href="https://i.postimg.cc/MG7qzW4x/emote.png" type="image/x-icon">
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Mochilas</title>
@@ -53,6 +53,10 @@
         .result-box strong {
             color: #3498db;
         }
+        footer img {
+            width: 50px; /* Reduz ainda mais o tamanho da imagem */
+            height: auto;
+        }
     </style>
 </head>
 <body>
@@ -76,8 +80,17 @@
             <h3>Valor Total:</h3>
             <p id="valorTotal">R$ 0,00</p>
         </div>
+
+        <h2>Quantidade de Tecidos</h2>
+        <label for="tecidos">Quantos tecidos você tem?</label>
+        <input type="number" id="tecidos" value="0" min="0" oninput="calcularTecidos();">
+        
+        <div class="result-box">
+            <h3>Resultado:</h3>
+            <p id="resultadoTecidos"></p>
+        </div>
     </div>
-	  <footer>
+    <footer>
         <img src="https://i.postimg.cc/WzSNyqxY/Jacky-Confuso.png" alt="Placeholder Image">
         <p>Direitos Reservados © 2024 <a href="https://jackymayers.github.io/" target="_blank">Jacky Mayers</a>.</p>
     </footer>
@@ -87,7 +100,7 @@
             let qtdMochilas = parseInt(document.getElementById("mochilas").value);
             
             if (isNaN(qtdMochilas) || qtdMochilas < 1) {
-                qtdMochilas = 0; // Se for inválido ou 0, setar como 0
+                qtdMochilas = 0;
             }
             
             let tecidos = qtdMochilas * 25;
@@ -113,12 +126,35 @@
             let valorUnitario = parseFloat(document.getElementById("valor").value);
             
             if (isNaN(qtdMochilas) || qtdMochilas < 1) {
-                qtdMochilas = 0; // Se for inválido ou 0, setar como 0
+                qtdMochilas = 0;
             }
             
             let valorTotal = qtdMochilas * valorUnitario;
             
-            document.getElementById("valorTotal").innerHTML = `R$ ${valorTotal.toFixed(2)}`;
+            // Formatação do valor total com separação de milhar
+            let valorFormatado = valorTotal.toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' });
+            
+            document.getElementById("valorTotal").innerHTML = valorFormatado;
+        }
+
+        function calcularTecidos() {
+            let qtdTecidos = parseInt(document.getElementById("tecidos").value);
+            
+            if (isNaN(qtdTecidos) || qtdTecidos < 0) {
+                qtdTecidos = 0;
+            }
+            
+            let mochilasFeitas = Math.floor(qtdTecidos / 25);  // número de mochilas inteiras que podem ser feitas
+            let sobra = qtdTecidos % 25;  // tecido que sobra após fazer as mochilas completas
+            let falta = 25 - sobra;  // quanto falta para completar a próxima mochila
+            
+            let mensagem = `Você tem <strong>${mochilasFeitas}</strong> mochilas feitas com <strong>${qtdTecidos}</strong> tecidos.`;
+            if (sobra > 0) {
+                // Agora mostra o número de tecidos faltantes para completar a próxima mochila
+                mensagem += ` Faltam <strong>${falta}</strong> tecido(s) para fazer <strong>${mochilasFeitas + 1}</strong> mochilas.`;
+            }
+            
+            document.getElementById("resultadoTecidos").innerHTML = mensagem;
         }
     </script>
 </body>
